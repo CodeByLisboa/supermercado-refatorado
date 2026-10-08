@@ -59,6 +59,25 @@ Servlets/JSP na versão web.
 - **Null Object** - `SemDesconto` evita testes de `null` quando não há promoção.
 - **Injeção de dependência pelo construtor** - `Main` monta as dependências.
 
+## Testes unitários (JUnit)
+
+A pasta `SupermercadoTestes` é um projeto NetBeans separado, só com testes **JUnit 4**.
+Ele usa o `SupermercadoRefatorado` como dependência (em *Libraries*) e testa as regras de
+cálculo e de negócio sem banco de dados:
+
+| Classe de teste | O que verifica |
+|---|---|
+| `ItemCarrinhoTest` | subtotal (preço x quantidade), precisão com centavos, quantidade inválida |
+| `CarrinhoDeComprasTest` | total do carrinho, produto repetido, remoção, lista somente leitura |
+| `PedidoTest` | total com e sem desconto, pedido imutável, cancelamento |
+| `DescontoPercentualTest` | cálculo e arredondamento do desconto percentual |
+| `DescontoPorValorMinimoTest` | valores de fronteira da promoção por valor mínimo |
+| `ValidadorCpfTest` | dígitos verificadores do CPF |
+| `PedidoServiceTest` | fechar, buscar e cancelar pedidos |
+
+**Como executar:** abra o projeto `SupermercadoTestes` no NetBeans, clique com o botão direito
+nele e escolha **Test** (Alt+F6). O resultado aparece na janela *Test Results*: 38 testes.
+
 ## Histórico
 
 O primeiro commit contém o código exatamente como foi entregue na atividade 3; cada commit

@@ -1,0 +1,6 @@
+Este projeto contem apenas testes unitarios (JUnit 4).
+
+- Os testes ficam em "Test Packages" (pasta test/).
+- As classes testadas estao no projeto SupermercadoRefatorado (pasta acima desta),
+  que entra como dependencia em Libraries.
+- Para executar: clique com o botao direito no projeto > Test (ou Alt+F6).
