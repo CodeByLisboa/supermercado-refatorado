@@ -1,0 +1,46 @@
+@startuml casos-de-uso
+left to right direction
+skinparam shadowing false
+skinparam dpi 150
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam usecase {
+  BackgroundColor #FFFFFF
+  BorderColor #2F3E4E
+  ArrowColor #2F3E4E
+}
+skinparam actorBorderColor #2F3E4E
+skinparam rectangle {
+  BackgroundColor #F7F9FB
+  BorderColor #8A9BAE
+}
+title Sistema de Supermercado - casos de uso
+
+actor Cliente as CL
+actor "Operador\n(atendente)" as OP
+
+rectangle "Sistema de Supermercado" {
+  usecase "UC01 - Adicionar produto\nao carrinho" as UC01
+  usecase "UC02 - Remover produto\ndo carrinho" as UC02
+  usecase "UC03 - Consultar total\ndo carrinho" as UC03
+  usecase "UC04 - Fechar pedido" as UC04
+  usecase "UC05 - Informar dados\ndo cliente" as UC05
+  usecase "UC06 - Aplicar política\nde desconto" as UC06
+  usecase "UC07 - Exibir resumo\ndo pedido" as UC07
+  usecase "UC08 - Consultar pedidos" as UC08
+  usecase "UC09 - Cancelar pedido" as UC09
+}
+
+CL --> UC01
+CL --> UC02
+CL --> UC03
+CL --> UC04
+CL --> UC08
+OP --> UC08
+OP --> UC09
+
+UC04 ..> UC05 : <<include>>
+UC04 ..> UC06 : <<include>>
+UC07 ..> UC04 : <<extend>>
+UC09 ..> UC08 : <<extend>>
+@enduml

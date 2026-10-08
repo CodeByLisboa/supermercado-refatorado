@@ -1,0 +1,151 @@
+@startuml diagrama-classes
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam dpi 150
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam packageStyle rectangle
+skinparam nodesep 30
+skinparam ranksep 45
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #2F3E4E
+  ArrowColor #2F3E4E
+  HeaderBackgroundColor #E8EEF5
+}
+skinparam package {
+  BackgroundColor #F7F9FB
+  BorderColor #8A9BAE
+  FontColor #2F3E4E
+}
+hide empty members
+title Sistema de Supermercado - classes após a refatoração
+
+package "supermercado.apresentacao" as AP {
+  interface FormatadorDePedido {
+    + formatar(pedido: Pedido): String
+  }
+  class FormatadorTextoPedido
+  class FormatadorHtmlPedido
+}
+
+package "supermercado.servico" as SV {
+  class PedidoService {
+    - pedidoDAO: PedidoDAO
+    - politicaDeDesconto: PoliticaDeDesconto
+    + fecharPedido(cliente, carrinho): Pedido
+    + buscarPedido(numero: int): Pedido
+    + listarPedidos(): List<Pedido>
+    + cancelarPedido(numero: int): Pedido
+  }
+}
+
+package "supermercado.dao" as DA {
+  interface PedidoDAO {
+    + proximoNumero(): int
+    + salvar(pedido: Pedido): void
+    + buscarPorNumero(numero: int): Optional<Pedido>
+    + listarTodos(): List<Pedido>
+  }
+  class PedidoDAOMemoria
+}
+
+package "supermercado.desconto" as DE {
+  interface PoliticaDeDesconto {
+    + calcularDesconto(subtotal: BigDecimal): BigDecimal
+    + getDescricao(): String
+  }
+  class SemDesconto
+  class DescontoPercentual {
+    - percentual: BigDecimal
+  }
+  class DescontoPorValorMinimo {
+    - valorMinimo: BigDecimal
+    - valorDoDesconto: BigDecimal
+  }
+}
+
+package "supermercado.modelo" as MO {
+  class CarrinhoDeCompras {
+    + adicionarProduto(produto: Produto, quantidade: int): void
+    + removerProduto(produto: Produto): boolean
+    + getItens(): List<ItemCarrinho>
+    + calcularTotal(): BigDecimal
+    + estaVazio(): boolean
+    + esvaziar(): void
+  }
+  class ItemCarrinho {
+    - quantidade: int
+    + calcularSubtotal(): BigDecimal
+    + comQuantidadeSomada(qtd: int): ItemCarrinho
+  }
+  class Produto {
+    - codigo: int
+    - nome: String
+    - precoUnitario: BigDecimal
+  }
+  class Pedido {
+    - numero: int
+    - dataHora: LocalDateTime
+    - subtotal: BigDecimal
+    - desconto: BigDecimal
+    - status: StatusPedido
+    + cancelar(): void
+    + getTotal(): BigDecimal
+  }
+  class Cliente {
+    - nome: String
+    - cpf: String
+    - email: String
+  }
+  enum StatusPedido {
+    FECHADO
+    CANCELADO
+  }
+}
+
+package "supermercado.validacao" as VA {
+  class ValidadorCpf <<utilitária>> {
+    + {static} isValido(cpf: String): boolean
+  }
+  class ValidadorEmail <<utilitária>> {
+    + {static} isValido(email: String): boolean
+  }
+}
+
+package "supermercado.excecao" as EX {
+  class RegraNegocioException
+}
+
+package "supermercado.util" as UT {
+  class FormatoMoeda <<utilitária>> {
+    + {static} formatar(valor: BigDecimal): String
+  }
+}
+
+FormatadorDePedido <|.. FormatadorTextoPedido
+FormatadorDePedido <|.. FormatadorHtmlPedido
+FormatadorDePedido ..> Pedido : exibe
+
+PedidoService --> PedidoDAO
+PedidoService --> PoliticaDeDesconto
+PedidoService ..> Pedido : cria
+
+PedidoDAO <|.. PedidoDAOMemoria
+PedidoDAO ..> Pedido : grava
+
+PoliticaDeDesconto <|.. SemDesconto
+PoliticaDeDesconto <|.. DescontoPercentual
+PoliticaDeDesconto <|.. DescontoPorValorMinimo
+
+CarrinhoDeCompras "1" o-- "0..*" ItemCarrinho
+ItemCarrinho "*" --> "1" Produto
+Pedido "1" o-- "1..*" ItemCarrinho
+Pedido "*" --> "1" Cliente
+Pedido --> StatusPedido
+Pedido ..> PoliticaDeDesconto : aplica
+Pedido ..> RegraNegocioException : lança
+
+Cliente ..> ValidadorCpf
+Cliente ..> ValidadorEmail
+@enduml
