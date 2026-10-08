@@ -1,6 +1,8 @@
 package supermercado;
 
 import java.math.BigDecimal;
+import supermercado.apresentacao.FormatadorDePedido;
+import supermercado.apresentacao.FormatadorTextoPedido;
 import supermercado.modelo.CarrinhoDeCompras;
 import supermercado.modelo.Cliente;
 import supermercado.modelo.Pedido;
@@ -20,6 +22,9 @@ public class Main {
         Cliente cliente = new Cliente("Joao Silva", "529.982.247-25", "joao@email.com");
 
         Pedido pedido = new Pedido(1, cliente, carrinho.getItens());
-        pedido.fecharPedido();
+
+        // A exibição agora é responsabilidade da camada de apresentação
+        FormatadorDePedido formatador = new FormatadorTextoPedido();
+        System.out.println(formatador.formatar(pedido));
     }
 }

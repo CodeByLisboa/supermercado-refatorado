@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import supermercado.excecao.RegraNegocioException;
-import supermercado.util.FormatoMoeda;
 
 /**
  * Pedido fechado por um cliente.
@@ -13,6 +12,10 @@ import supermercado.util.FormatoMoeda;
  * <p>O pedido guarda uma cópia imutável dos itens no momento do fechamento.
  * Antes ele guardava uma referência ao carrinho, então qualquer item
  * adicionado ao carrinho depois do fechamento alterava o total do pedido.</p>
+ *
+ * <p>Esta classe contém apenas dados e regras do pedido. Ela não monta textos
+ * nem imprime nada: isso é papel da camada de apresentação
+ * ({@code supermercado.apresentacao}).</p>
  */
 public class Pedido {
 
@@ -76,18 +79,5 @@ public class Pedido {
 
     public BigDecimal getTotal() {
         return subtotal;
-    }
-
-    // TODO (proximo commit): mover a montagem do texto e a impressao para a camada de apresentacao.
-    public String gerarResumo() {
-        return "Numero do pedido: " + numero + "\n"
-                + "Cliente: " + cliente.getNome() + "\n"
-                + "E-mail: " + cliente.getEmail() + "\n"
-                + "Total do pedido: " + FormatoMoeda.formatar(getTotal()) + "\n"
-                + "=====================================";
-    }
-
-    public void fecharPedido() {
-        System.out.println(gerarResumo());
     }
 }
