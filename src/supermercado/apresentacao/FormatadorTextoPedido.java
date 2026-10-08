@@ -32,6 +32,9 @@ public class FormatadorTextoPedido implements FormatadorDePedido {
             texto.append(formatarItem(item)).append('\n');
         }
         texto.append(LINHA_SIMPLES).append('\n');
+        texto.append(formatarTotal("Subtotal:", FormatoMoeda.formatar(pedido.getSubtotal()))).append('\n');
+        texto.append(formatarTotal("Desconto (" + pedido.getDescricaoDesconto() + "):",
+                "- " + FormatoMoeda.formatar(pedido.getDesconto()))).append('\n');
         texto.append(formatarTotal("Total do pedido:", FormatoMoeda.formatar(pedido.getTotal()))).append('\n');
         texto.append(LINHA_DUPLA);
         return texto.toString();
