@@ -1,0 +1,8 @@
+# Saidas de compilacao do NetBeans/Ant
+build/
+dist/
+# Configuracoes locais do NetBeans (especificas de cada maquina)
+nbproject/private/
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
